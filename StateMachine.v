@@ -60,9 +60,9 @@ This gives 33 total I/O Pins
 	       if(Short)
 		       ShortShunt = 1;
 	       if(rst || Short || ~start)
-		       State <=`BAD;
+		       State =`BAD;
 	       else
-		       State <= NextState;
+		       State = NextState;
        end
 
        initial begin

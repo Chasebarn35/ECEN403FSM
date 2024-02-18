@@ -102,11 +102,23 @@ initial begin
 			@(negedge CLK);
 		end
 	passTest(Sout,6'b001100, "Changing to SBB", passed);
+	CURRSIGN = ~CURRSIGN;
+	DesiredLoad = `LAA;
+
+	while(watchdog <= 30)
+		begin
+			@(posedge CLK);
+			@(negedge CLK);
+		end
+	passTest(Sout,6'b110000, "SAA from Negative Current", passed);
+
+	//The Short Test
 	SHORT = 1;
 	@(posedge CLK);
-	SHORT = 0;
 	@(negedge CLK);
-	while(watchdog <= 25)
+	SHORT = 0;
+	DesiredLoad = `LCC;
+	while(watchdog <= 32)
 		begin
 			@(posedge CLK);
 			@(negedge CLK);
@@ -114,10 +126,7 @@ initial begin
 	passTest(Sout,6'b000000, "Shorted", passed);
 
 
-
-
-
-	allPassed(passed,5);
+	allPassed(passed,6);
 	$finish;
 end
 
@@ -126,9 +135,9 @@ initial begin
 	CURRSIGN = 1;
 end
 
-always begin
-	#(1 * `Phase) CURRSIGN = ~CURRSIGN;
-end
+//always begin
+	//#(1 * `Phase) CURRSIGN = ~CURRSIGN;
+//end
 
 always begin
 	#`HalfClock CLK = ~CLK;
