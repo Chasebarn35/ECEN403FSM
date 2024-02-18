@@ -1,9 +1,17 @@
-`timescale 1ns / 1ps
+`timescale 10us / 100ns
 
 
 `define TESTCOUNT 32
-`define HalfClock 30
+`define HalfClock 100
 `define ClockPeriod `HalfClock * 2
+`define Phase `HalfClock * 166.6666
+`define LAA 2'b01
+`define LBB 2'b10
+`define LCC 2'b11
+`define NUL 2'b00
+
+
+
 
 module FSMTest;
 
@@ -35,9 +43,10 @@ reg CLK;
 reg rst;
 reg start;
 reg [1:0] DesiredLoad;
-reg CurrentSign;
-reg Short;
+reg CURRSIGN;
+reg SHORT;
 reg [7:0] passed;
+reg [15:0] watchdog;
 
 // Output
 wire [5:0] Sout;
@@ -48,35 +57,82 @@ FSM uut (
 	.rst(rst),
 	.start(start),
 	.DesiredLoad(DesiredLoad),
-	.CurrentSign(CurrentSign),
-	.Short(Short),
+	.CurrentSign(CURRSIGN),
+	.Short(SHORT),
 	.Sout(Sout)
 );
 
 initial begin
 	rst = 1;
-	start = 0;
 	passed = 0;
+	DesiredLoad = `NUL;
+	start = 0;
+	SHORT = 0;
+
+	watchdog = 0;
 
 	#(1 * `ClockPeriod);
 	#1
 	@(posedge CLK);
 	@(negedge CLK);
 	@(posedge CLK);
+	rst = 0;
 
 	//TEST 1, INITIAL START THAT THERE IS NO OUTPUT
 	passTest(Sout,6'b000000, "Initial Start", passed);
+	DesiredLoad = `LAA;
+	while(watchdog <= 5)
+		begin
+			@(posedge CLK);
+			@(negedge CLK);
+		end
+	passTest(Sout,6'b000000, "Starting before Start Pin Enable", passed);
 
-	allPassed(passed,1);
+	start = 1;
+	while(watchdog <= 10)
+		begin
+			@(posedge CLK);
+			@(negedge CLK);
+		end
+	passTest(Sout,6'b110000, "Starting with SAA", passed);
+	DesiredLoad = `LBB;
+	while(watchdog <= 20)
+		begin
+			@(posedge CLK);
+			@(negedge CLK);
+		end
+	passTest(Sout,6'b001100, "Changing to SBB", passed);
+	SHORT = 1;
+	@(posedge CLK);
+	SHORT = 0;
+	@(negedge CLK);
+	while(watchdog <= 25)
+		begin
+			@(posedge CLK);
+			@(negedge CLK);
+		end
+	passTest(Sout,6'b000000, "Shorted", passed);
+
+
+
+
+
+	allPassed(passed,5);
 	$finish;
 end
 
 initial begin
 	CLK = 0;
+	CURRSIGN = 1;
+end
+
+always begin
+	#(1 * `Phase) CURRSIGN = ~CURRSIGN;
 end
 
 always begin
 	#`HalfClock CLK = ~CLK;
 	#`HalfClock CLK = ~CLK;
+	watchdog = watchdog + 1;
 end
 endmodule

@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 `define BAD 4'b0000 
 `define S01 4'b0001 
 `define S02 4'b0010 
@@ -55,12 +54,20 @@ This gives 33 total I/O Pins
        );
 
        reg [3:0] State, NextState;
-       always @(posedge clk or posedge clk or posedge Short)
+       reg ShortShunt;
+       always @(posedge clk or posedge rst or posedge Short)
        begin
-	       if(rst || Short)
+	       if(Short)
+		       ShortShunt = 1;
+	       if(rst || Short || ~start)
 		       State <=`BAD;
 	       else
 		       State <= NextState;
+       end
+
+       initial begin
+	       Sout <= 6'b000000;
+	       ShortShunt = 0;
        end
 
        always @(posedge rst or posedge clk or posedge Short)
@@ -214,7 +221,7 @@ This gives 33 total I/O Pins
 		       `BAD:	
 		       begin
 			       Sout <= 6'b000000;
-			       if(Short)
+			       if(ShortShunt)
 				       NextState = `BAD; 
 			       else
 				       case(DesiredLoad)
