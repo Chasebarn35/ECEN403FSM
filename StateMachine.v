@@ -40,7 +40,11 @@ the state machines output
 6 gate driver outputs
 This ensures proper commutation, as seen in (Filho et al., 2012)
 
-This gives 33 total I/O Pins
+This gives 33 minimum total I/O Pins
+
+
+
+
 */
 
        module FSM(
@@ -54,11 +58,8 @@ This gives 33 total I/O Pins
        );
 
        reg [3:0] State, NextState;
-       reg ShortShunt;
        always @(posedge clk or posedge rst or posedge Short)
        begin
-	       if(Short)
-		       ShortShunt = 1;
 	       if(rst || Short || ~start)
 		       State =`BAD;
 	       else
@@ -67,7 +68,6 @@ This gives 33 total I/O Pins
 
        initial begin
 	       Sout <= 6'b000000;
-	       ShortShunt = 0;
        end
 
        always @(posedge rst or posedge clk or posedge Short)
@@ -221,7 +221,7 @@ This gives 33 total I/O Pins
 		       `BAD:	
 		       begin
 			       Sout <= 6'b000000;
-			       if(ShortShunt)
+			       if(Short)
 				       NextState = `BAD; 
 			       else
 				       case(DesiredLoad)

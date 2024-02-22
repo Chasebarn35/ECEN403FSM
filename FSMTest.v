@@ -1,10 +1,9 @@
-`timescale 10us / 100ns
+`timescale 1ns / 1ps
 
 
 `define TESTCOUNT 32
-`define HalfClock 100
+`define HalfClock 50
 `define ClockPeriod `HalfClock * 2
-`define Phase `HalfClock * 166.6666
 `define LAA 2'b01
 `define LBB 2'b10
 `define LCC 2'b11
@@ -110,7 +109,7 @@ initial begin
 			@(posedge CLK);
 			@(negedge CLK);
 		end
-	passTest(Sout,6'b110000, "SAA from Negative Current", passed);
+	passTest(Sout,6'b110000, "Negative Current SAA", passed);
 
 	//The Short Test
 	SHORT = 1;
@@ -134,10 +133,6 @@ initial begin
 	CLK = 0;
 	CURRSIGN = 1;
 end
-
-//always begin
-	//#(1 * `Phase) CURRSIGN = ~CURRSIGN;
-//end
 
 always begin
 	#`HalfClock CLK = ~CLK;
