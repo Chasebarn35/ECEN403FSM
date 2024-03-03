@@ -1,0 +1,114 @@
+
+State Machine - |top_commutation|FSM:PhaseC|NextState
+Name NextState.1111 NextState.1110 NextState.1101 NextState.1100 NextState.1011 NextState.1010 NextState.1001 NextState.1000 NextState.0111 NextState.0110 NextState.0101 NextState.0100 NextState.0011 NextState.0010 NextState.0001 NextState.0000 
+NextState.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+NextState.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+NextState.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+NextState.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+NextState.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+NextState.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+NextState.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+NextState.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+NextState.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+NextState.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+NextState.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+NextState.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |top_commutation|FSM:PhaseC|State
+Name State.1111 State.1110 State.1101 State.1100 State.1011 State.1010 State.1001 State.1000 State.0111 State.0110 State.0101 State.0100 State.0011 State.0010 State.0001 State.0000 
+State.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+State.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+State.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+State.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+State.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+State.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+State.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+State.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+State.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+State.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+State.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+State.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+State.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |top_commutation|FSM:PhaseB|NextState
+Name NextState.1111 NextState.1110 NextState.1101 NextState.1100 NextState.1011 NextState.1010 NextState.1001 NextState.1000 NextState.0111 NextState.0110 NextState.0101 NextState.0100 NextState.0011 NextState.0010 NextState.0001 NextState.0000 
+NextState.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+NextState.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+NextState.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+NextState.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+NextState.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+NextState.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+NextState.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+NextState.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+NextState.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+NextState.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+NextState.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+NextState.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |top_commutation|FSM:PhaseB|State
+Name State.1111 State.1110 State.1101 State.1100 State.1011 State.1010 State.1001 State.1000 State.0111 State.0110 State.0101 State.0100 State.0011 State.0010 State.0001 State.0000 
+State.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+State.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+State.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+State.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+State.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+State.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+State.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+State.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+State.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+State.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+State.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+State.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+State.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |top_commutation|FSM:PhaseA|NextState
+Name NextState.1111 NextState.1110 NextState.1101 NextState.1100 NextState.1011 NextState.1010 NextState.1001 NextState.1000 NextState.0111 NextState.0110 NextState.0101 NextState.0100 NextState.0011 NextState.0010 NextState.0001 NextState.0000 
+NextState.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+NextState.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+NextState.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+NextState.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+NextState.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+NextState.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+NextState.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+NextState.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+NextState.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+NextState.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+NextState.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+NextState.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+NextState.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |top_commutation|FSM:PhaseA|State
+Name State.1111 State.1110 State.1101 State.1100 State.1011 State.1010 State.1001 State.1000 State.0111 State.0110 State.0101 State.0100 State.0011 State.0010 State.0001 State.0000 
+State.0000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+State.0001 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+State.0010 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+State.0011 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+State.0100 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+State.0101 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+State.0110 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+State.0111 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+State.1000 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+State.1001 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+State.1010 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+State.1011 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+State.1100 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1101 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1110 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+State.1111 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
