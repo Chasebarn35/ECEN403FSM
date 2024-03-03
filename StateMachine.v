@@ -34,34 +34,32 @@ the next 2 bits represent the desired Load
 The State machines share
 1 clock input
 1 reset input
-1 start input
-1 Short input
 the state machines output
 6 gate driver outputs
 This ensures proper commutation, as seen in (Filho et al., 2012)
 
+
+
+
 This gives 33 minimum total I/O Pins
-
-
 
 
 */
 
+
        module FSM(
 	       input clk,
 	       input rst,
-	       input start,
 	       input [1:0] DesiredLoad,
 	       input CurrentSign,
-	       input Short,
 	       output reg [5:0] Sout
        );
 
        reg [3:0] State, NextState;
-       always @(posedge clk or posedge rst or posedge Short)
+       always @(posedge clk) 
        begin
-	       if(rst || Short || ~start)
-		       State =`BAD;
+	       if(rst)/
+		       State = `BAD;
 	       else
 		       State = NextState;
        end
@@ -70,7 +68,7 @@ This gives 33 minimum total I/O Pins
 	       Sout <= 6'b000000;
        end
 
-       always @(posedge rst or posedge clk or posedge Short)
+       always @(posedge clk)
        begin
 	       case(State)
 		       `S01:
@@ -80,6 +78,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `S02; end
 				       `LCC: begin NextState = `S09; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S02:	
@@ -89,6 +88,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S01; end
 				       `LBB: begin NextState = `S05; end
 				       `LCC: begin NextState = `S05; end //TODO
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S03:	
@@ -98,6 +98,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S11; end
 				       `LBB: begin NextState = `S04; end
 				       `LCC: begin NextState = `S04; end //TODO
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S04:	
@@ -107,6 +108,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S03; end
 				       `LBB: begin NextState = `SBB; end
 				       `LCC: begin NextState = `S07; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S05:	
@@ -116,6 +118,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S02; end
 				       `LBB: begin NextState = `SBB; end
 				       `LCC: begin NextState = `S06; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S06:	
@@ -125,6 +128,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S05; end //TODO
 				       `LBB: begin NextState = `S05; end
 				       `LCC: begin NextState = `S10; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S07:	
@@ -134,6 +138,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S04; end //TODO
 				       `LBB: begin NextState = `S04; end
 				       `LCC: begin NextState = `SCC; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S08:	
@@ -143,6 +148,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S12; end
 				       `LBB: begin NextState = `S07; end
 				       `LCC: begin NextState = `SCC; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S09:	
@@ -152,6 +158,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S01; end
 				       `LBB: begin NextState = `S01; end //TODO
 				       `LCC: begin NextState = `S10; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S10:	
@@ -161,6 +168,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S09; end
 				       `LBB: begin NextState = `S06; end
 				       `LCC: begin NextState = `SCC; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S11:	
@@ -170,6 +178,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `S03; end
 				       `LCC: begin NextState = `S12; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `S12:	
@@ -179,6 +188,7 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `S11; end
 				       `LBB: begin NextState = `S11; end //TODO
 				       `LCC: begin NextState = `S08; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `SAA:	
@@ -191,6 +201,7 @@ This gives 33 minimum total I/O Pins
 				       `LBBN: begin NextState = `S11; end
 				       `LCCP: begin NextState = `S01; end
 				       `LCCN: begin NextState = `S11; end
+				       default: NextState = State;
 			       endcase
 
 		       end
@@ -204,6 +215,7 @@ This gives 33 minimum total I/O Pins
 				       `LBBN: begin NextState = `SBB; end
 				       `LCCP: begin NextState = `S05; end
 				       `LCCN: begin NextState = `S04; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `SCC:	
@@ -216,22 +228,21 @@ This gives 33 minimum total I/O Pins
 				       `LBBN: begin NextState = `S08; end
 				       `LCCP: begin NextState = `SCC; end
 				       `LCCN: begin NextState = `SCC; end
+				       default: NextState = State;
 			       endcase
 		       end
 		       `BAD:	
 		       begin
 			       Sout <= 6'b000000;
-			       if(Short)
-				       NextState = `BAD; 
-			       else
-				       case(DesiredLoad)
-					       `LAA: begin NextState = `SAA; end
-					       `LBB: begin NextState = `SBB; end
-					       `LCC: begin NextState = `SCC; end
-					       `NUL: begin NextState = `BAD; end
-				       endcase
-			       end
-		       endcase
-	       end
+			       case(DesiredLoad)
+				       `LAA: begin NextState = `SAA; end
+				       `LBB: begin NextState = `SBB; end
+				       `LCC: begin NextState = `SCC; end
+				       `NUL: begin NextState = `BAD; end
+				       default: NextState = State;
+			       endcase
+		       end
+	       endcase
+       end
 
-	       endmodule
+       endmodule

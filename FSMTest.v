@@ -57,7 +57,6 @@ FSM uut (
 	.start(start),
 	.DesiredLoad(DesiredLoad),
 	.CurrentSign(CURRSIGN),
-	.Short(SHORT),
 	.Sout(Sout)
 );
 
@@ -72,65 +71,47 @@ initial begin
 
 	#(1 * `ClockPeriod);
 	#1
-	@(posedge CLK);
-	@(negedge CLK);
-	@(posedge CLK);
 	rst = 0;
 
 	//TEST 1, INITIAL START THAT THERE IS NO OUTPUT
 	passTest(Sout,6'b000000, "Initial Start", passed);
 	DesiredLoad = `LAA;
-	while(watchdog <= 5)
-		begin
-			@(posedge CLK);
-			@(negedge CLK);
-		end
+	
+	#(4*`ClockPeriod)
+
 	passTest(Sout,6'b000000, "Starting before Start Pin Enable", passed);
 
 	start = 1;
-	while(watchdog <= 10)
-		begin
-			@(posedge CLK);
-			@(negedge CLK);
-		end
+	#(2*`ClockPeriod)
+
 	passTest(Sout,6'b110000, "Starting with SAA", passed);
 	DesiredLoad = `LBB;
-	while(watchdog <= 20)
-		begin
-			@(posedge CLK);
-			@(negedge CLK);
-		end
+
+	#(7*`ClockPeriod)
+
 	passTest(Sout,6'b001100, "Changing to SBB", passed);
 	CURRSIGN = ~CURRSIGN;
 	DesiredLoad = `LAA;
 
-	while(watchdog <= 30)
-		begin
-			@(posedge CLK);
-			@(negedge CLK);
-		end
+	#(6*`ClockPeriod)
+
 	passTest(Sout,6'b110000, "Negative Current SAA", passed);
 
 	//The Short Test
-	SHORT = 1;
-	@(posedge CLK);
-	@(negedge CLK);
-	SHORT = 0;
-	DesiredLoad = `LCC;
-	while(watchdog <= 32)
-		begin
-			@(posedge CLK);
-			@(negedge CLK);
-		end
-	passTest(Sout,6'b000000, "Shorted", passed);
+	//SHORT = 1;
+	//#(2*`ClockPeriod)
+	//passTest(Sout,6'b000000, "Shorted", passed);
+	//DesiredLoad = `LCC;
+	//#(8*`ClockPeriod)
+	//passTest(Sout,6'b000000, "Still Shorted", passed);
 
 
-	allPassed(passed,6);
+	allPassed(passed,5);
 	$finish;
 end
 
 initial begin
-	CLK = 0;
+	CLK = 1;
 	CURRSIGN = 1;
 end
 
