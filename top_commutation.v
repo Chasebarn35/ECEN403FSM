@@ -7,7 +7,19 @@
 //AABBCC
 //AAAAAABBBBBBCCCCCC
 
-// input wire [4:0] SW, //Temporary Switches
+//CLK is defaulted to 50k Hz input
+//rst is 1 for reset, 0 for function
+//start starts when it goes to 1, off when 0
+//rst st | Out
+//0   0  | 0
+//0   1  | 1
+//1   0  | 0
+//1   1  | 0
+
+
+//When any short is signalled, I want it to be unable to be reset, as I want
+//whatver short has appeared to be investigated, and the device to be atleast
+//power cycled
 
 module top_commutation(
 	input wire clk, //internal clock
@@ -16,111 +28,57 @@ module top_commutation(
 	input wire [2:0]shorts, //Shorts from each phase 
 	input wire [2:0] CurrentSign, //Current of each phase ABC
 	input wire [5:0] DesiredLoad, //Desired load for each phase from MCU AABBCC
-	output wire [17:0] Sout, //OUTPUT 
+	output reg [17:0] Sout, //OUTPUT 
 	output wire short
 );
 
 
-wire [5:0] SoutA;
-wire [5:0] SoutB;
-wire [5:0] SoutC;
-wire short;
-wire start;
-assign start = SW[4];//5th SWITCH
-reg shortReg;
-assign short = shortReg;
-//assign short = shorts[0] | shorts[1] | shorts[2];
-wire [17:0] Sout; //OUTPUT FINAL
-reg [2:0] CurrentSign;
-reg[18:0] currentTimerA;
-reg[18:0] currentTimerB;
-reg[18:0] currentTimerC;
+reg _short;
+assign short = _short;
+reg _rst;
+wire [17:0] _Sout; //output to be ANDed with Short output
 
 
 FSM PhaseA(
 	clk,
-	rst,
+	_rst,
 	DesiredLoad[5:4],
 	CurrentSign[2],
-	Sout[17:12]);
+	_Sout[17:12]);
 
 FSM PhaseB(
 	clk,
-	rst,
+	_rst,
 	DesiredLoad[3:2],
 	CurrentSign[1],
-	Sout[11:6);
+	_Sout[11:6]);
 
 FSM PhaseC(
 	clk,
-	rst,
+	_rst,
 	DesiredLoad[1:0],
 	CurrentSign[0],
-	Sout[5:0]);
+	_Sout[5:0]);
 
 initial begin
-	CurrentSign <= 3'b110;
-	currentTimerA = 0;//Initial Phase is 0
-	currentTimerB = 277778;//417 * 2/3
-	currentTimerC = 138889;//417 * 1/3
-	shortReg = 0;
+	_short <= 0;
+	_rst <= 0;
+	Sout <= 18'b0;
 end
-//Assuming that this is running at 50MHz, I want to change the current sign every 120Hz.
-//This 50M/120=416667, repeat for each
-//This is temporary, just to simulate current signs
-always @(posedge clk) begin
-	if(currentTimerA >= 416667) begin
-		CurrentSign[2] <= ~CurrentSign[2];
-		currentTimerA = 0;
-	end
-	if(currentTimerB >= 416667) begin
-		CurrentSign[1] <= ~CurrentSign[1];
-		currentTimerB = 0;
-	end
-	if(currentTimerC >= 416667) begin
-		CurrentSign[0] <= ~CurrentSign[0];
-		currentTimerC = 0;
-	end
-	currentTimerA = currentTimerA + 19'b1;
-	currentTimerB = currentTimerB + 19'b1;
-	currentTimerC = currentTimerC + 19'b1;
-end
-
 
 always @(posedge clk) begin
-	if(SW[3] || shortReg) begin
-		shortReg <= 1; //TEMPORARY SHORT ACT
-		SoutTemp <= 5'b1;
-	end
-	else begin
-	casez(SW[2:0])
-		3'b000: begin
-			SoutTemp <= {SoutA[3:0],CurrentSign[2]};
-		end
-		3'b001: begin
-			SoutTemp <= {SoutB[3:0],CurrentSign[1]};
-		end
-		3'b010: begin
-			SoutTemp <= {SoutC[3:0],CurrentSign[0]};
-		end
-		3'b011: begin
-			SoutTemp <= {SoutA[5:4],DesiredLoad[5:4],CurrentSign[2]};
-		end
-		3'b100: begin
-			SoutTemp <= {SoutB[5:4],DesiredLoad[3:2],CurrentSign[1]};
-		end
-		3'b101: begin
-			SoutTemp <= {SoutC[5:4],DesiredLoad[1:0],CurrentSign[0]};
-		end
-		default: begin
-			SoutTemp <= 5'b0;
-		end
-	endcase
-	end
+	if(shorts) begin _short = 1; end
+end
+
+always @(posedge clk) begin
+	_rst = !(!rst && start);
+end
+
+always @(posedge clk) begin
+	Sout <= short ? 18'b0 : _Sout;
 end
 
 
 
-//assign Sout = short ? 18'b0 : {SoutA,SoutB,SoutC}; TODO
 
 endmodule

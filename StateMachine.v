@@ -66,6 +66,7 @@ This gives 33 minimum total I/O Pins
 
        initial begin
 	       Sout <= 6'b000000;
+	       State = `BAD;
        end
 
        always @(posedge clk)

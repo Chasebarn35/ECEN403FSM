@@ -2,17 +2,23 @@
 
 
 `define TESTCOUNT 32 
+`define QuartClock 25
 `define HalfClock 50 
 `define ClockPeriod `HalfClock * 2 
+`define SAA 6'b110000
+`define SBB 6'b001100
+`define SCC 6'b000011
 `define LAA 2'b01 
 `define LBB 2'b10 
 `define LCC 2'b11 
 `define NUL 2'b00 
 
-module FSMTest; 
+
+module commutationTB; 
+
 initial 
 begin         
-$dumpfile("FSM.vcd");         
+$dumpfile("Comm.vcd");         
 $dumpvars; 
 end 
 task passTest;         
@@ -32,6 +38,7 @@ endtask
 
 
 // Inputs
+reg PLL;
 reg CLK;
 reg RST;
 reg START;
@@ -41,14 +48,13 @@ reg [5:0] D_LOAD;
 
 // UUT
 reg [7:0] passed;
-reg [15:0] watchdog;
 
 // Outputs
-reg [17:0] SOUT;
-reg SHORT;
+wire [17:0] SOUT;
+wire SHORT;
 
 top_commutation uut (
-	.clk(CLK),
+	.clk(PLL),
 	.rst(RST),
 	.start(START),
 	.shorts(SHORTS),
@@ -59,30 +65,78 @@ top_commutation uut (
 );
 
 initial begin
-	rst = 1;
+	RST = 1;
 	passed = 0;
-	DesiredLoad = {`NUL,`NUL,`NUL};
-	start = 0;
-	shorts = 3'b000;
+	D_LOAD = {`NUL,`NUL,`NUL};
+	START = 0;
+	SHORTS = 3'b000;
 
-	watchdog = 0;
 
 
 	#(1 * `ClockPeriod);
-	#(1
-	rst = 0;
+	RST = 0;
 
 	//TEST 1, INITIAL START FOR NO OUTPUT
-	passTest(Sout,18'b0, "Initial start", passed);
-	DesiredLoad = {`LAA,`LBB,`LCC};
+	passTest(SOUT,18'b0, "Initial start", passed);
+	D_LOAD = {`LAA,`LBB,`LCC};
 
 	#(4*`ClockPeriod)
+	passTest(SOUT,18'b0, "Check Before Start", passed);
 
-	passTest(Sout 18'b0, "Starting before Start Pin Enable", passed);
-
-	start = 1;
+	START = 1;
 	#(2*`ClockPeriod)
+	passTest(SOUT,{`SAA,`SBB,`SCC}, "Reset to SAABBCC", passed);
 
-	passTest(Sout,{`LAA,`LBB,`LCC}, "Starting with 3 Phases", passed);
-	DesiredLoad = {`LBB,`LCC,`LAA};
-	#(8
+	D_LOAD = {`LBB,`LCC,`LAA};
+	#(5*`ClockPeriod)
+	passTest(SOUT,{`SBB,`SCC,`SAA}, "SAABBCC to SBBCCAA", passed);
+
+	D_LOAD = {`LCC,`LAA,`LBB};
+	#(5*`ClockPeriod)
+	passTest(SOUT,{`SCC,`SAA,`SBB}, "SBBCCAA to SCCAABB", passed);
+
+	CURRSIGNS = 3'b110;
+
+	D_LOAD = {`LBB,`LCC,`LAA};
+	#(5*`ClockPeriod)
+	passTest(SOUT,{`SBB,`SCC,`SAA}, "SCCAABB to SBBCCAA Curr", passed);
+
+	RST = 1;
+	#(2 * `ClockPeriod);
+	passTest(SOUT,18'b0, "Reset", passed);
+
+	RST = 0;
+	D_LOAD = {`LAA,`LAA,`LBB};
+	#(5*`ClockPeriod)
+	passTest(SOUT,{`SAA,`SAA,`SBB}, "Reset to SAAAABB", passed);
+
+	SHORTS = 3'b110;
+	#(2*`ClockPeriod)
+	passTest(SOUT,18'b0, "Shorted", passed);
+
+	SHORTS = 3'b0;
+	#(2*`ClockPeriod)
+	passTest(SOUT,18'b0, "Shorted After Pulse Off", passed);
+
+
+	allPassed(passed,10);
+	$finish;
+end
+
+
+initial begin
+	CLK = 1;
+	PLL = 1;
+	CURRSIGNS = 3'b0;
+end
+
+always begin
+	#`QuartClock PLL = ~PLL;
+	#`QuartClock PLL = ~PLL;
+end
+
+always begin
+	#`HalfClock CLK = ~CLK;
+	#`HalfClock CLK = ~CLK;
+end
+endmodule

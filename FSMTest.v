@@ -47,7 +47,6 @@ reg SHORT;
 
 // UUT
 reg [7:0] passed;
-reg [15:0] watchdog;
 
 // Output
 wire [5:0] Sout;
@@ -66,8 +65,6 @@ initial begin
 	passed = 0;
 	DesiredLoad = `NUL;
 	SHORT = 0;
-
-	watchdog = 0;
 
 	#(1 * `ClockPeriod);
 	#1
@@ -92,6 +89,8 @@ initial begin
 	passTest(Sout,6'b001000, "S2 to S5", passed);
 	#(2*`ClockPeriod)
 	passTest(Sout,6'b001100, "S5 to SBB", passed);
+	#(10*`ClockPeriod)
+
 
 	DesiredLoad = `LCC;
 	#(2*`ClockPeriod)
@@ -220,6 +219,7 @@ initial begin
 	passTest(Sout,6'b000001, "S12 to S8", passed);
 	#(2*`ClockPeriod)
 	passTest(Sout,6'b000011, "S8 to SCC", passed);
+	#(10*`ClockPeriod)
 
 
 
@@ -239,6 +239,5 @@ end
 always begin
 	#`HalfClock CLK = ~CLK;
 	#`HalfClock CLK = ~CLK;
-	watchdog = watchdog + 1;
 end
 endmodule
