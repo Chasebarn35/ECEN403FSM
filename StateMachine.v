@@ -20,10 +20,12 @@
 `define LBBN 3'b010
 `define LCCP 3'b111
 `define LCCN 3'b011
+`ifndef LAA
 `define LAA 2'b01
 `define LBB 2'b10
 `define LCC 2'b11
 `define NUL 2'b00
+`endif
 
 
 /*

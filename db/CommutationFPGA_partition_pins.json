@@ -4,35 +4,7 @@
 			"name" : "Top",
 			"pins" : [
 				{
-					"name" : "SoutTemp[0]",
-					"strict" : false
-				},
-				{
-					"name" : "SoutTemp[1]",
-					"strict" : false
-				},
-				{
-					"name" : "SoutTemp[2]",
-					"strict" : false
-				},
-				{
-					"name" : "SoutTemp[3]",
-					"strict" : false
-				},
-				{
-					"name" : "SoutTemp[4]",
-					"strict" : false
-				},
-				{
-					"name" : "SW[0]",
-					"strict" : false
-				},
-				{
-					"name" : "SW[1]",
-					"strict" : false
-				},
-				{
-					"name" : "SW[2]",
+					"name" : "LED[0]",
 					"strict" : false
 				},
 				{
@@ -40,35 +12,19 @@
 					"strict" : false
 				},
 				{
+					"name" : "SW[1]",
+					"strict" : false
+				},
+				{
+					"name" : "SW[0]",
+					"strict" : false
+				},
+				{
+					"name" : "SW[2]",
+					"strict" : false
+				},
+				{
 					"name" : "clk",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[2]",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[0]",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[4]",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[3]",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[1]",
-					"strict" : false
-				},
-				{
-					"name" : "DesiredLoad[5]",
-					"strict" : false
-				},
-				{
-					"name" : "SW[4]",
 					"strict" : false
 				}
 			]

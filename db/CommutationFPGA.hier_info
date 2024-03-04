@@ -1,36 +1,75 @@
-|top_commutation
+|commutation_dev
+clk => clk.IN1
+rst => rst.IN1
+SW[0] => Mux0.IN4
+SW[0] => Mux1.IN4
+SW[0] => Mux2.IN4
+SW[0] => Mux3.IN4
+SW[0] => Mux4.IN4
+SW[1] => Mux0.IN3
+SW[1] => Mux1.IN3
+SW[1] => Mux2.IN3
+SW[1] => Mux3.IN3
+SW[1] => Mux4.IN3
+SW[2] => Mux0.IN2
+SW[2] => Mux1.IN2
+SW[2] => Mux2.IN2
+SW[2] => Mux3.IN2
+SW[2] => Mux4.IN2
+SW[3] => SHORTS.OUTPUTSELECT
+SW[3] => SHORTS.OUTPUTSELECT
+SW[3] => SHORTS.OUTPUTSELECT
+SW[3] => LED[0]~reg0.ENA
+SW[3] => LED[1]~reg0.ENA
+SW[3] => LED[2]~reg0.ENA
+SW[3] => LED[3]~reg0.ENA
+SW[3] => LED[4]~reg0.ENA
+SW[4] => START.IN1
+LED[0] <= LED[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[1] <= LED[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[2] <= LED[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[3] <= LED[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[4] <= LED[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|commutation_dev|top_commutation:uut
 clk => clk.IN3
+rst => _rst.IN0
+start => _rst.IN1
+shorts[0] => WideOr0.IN0
+shorts[1] => WideOr0.IN1
+shorts[2] => WideOr0.IN2
+CurrentSign[0] => CurrentSign[0].IN1
+CurrentSign[1] => CurrentSign[1].IN1
+CurrentSign[2] => CurrentSign[2].IN1
 DesiredLoad[0] => DesiredLoad[0].IN1
 DesiredLoad[1] => DesiredLoad[1].IN1
 DesiredLoad[2] => DesiredLoad[2].IN1
 DesiredLoad[3] => DesiredLoad[3].IN1
 DesiredLoad[4] => DesiredLoad[4].IN1
 DesiredLoad[5] => DesiredLoad[5].IN1
-SW[0] => Mux0.IN4
-SW[0] => Mux1.IN4
-SW[0] => Mux2.IN7
-SW[0] => Mux3.IN7
-SW[0] => Mux4.IN4
-SW[1] => Mux0.IN3
-SW[1] => Mux1.IN3
-SW[1] => Mux2.IN6
-SW[1] => Mux3.IN6
-SW[1] => Mux4.IN3
-SW[2] => Mux0.IN2
-SW[2] => Mux1.IN2
-SW[2] => Mux2.IN5
-SW[2] => Mux3.IN5
-SW[2] => Mux4.IN2
-SW[3] => always1.IN1
-SW[4] => start.IN3
-SoutTemp[0] << SoutTemp[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-SoutTemp[1] << SoutTemp[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-SoutTemp[2] << SoutTemp[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-SoutTemp[3] << SoutTemp[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-SoutTemp[4] << SoutTemp[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[0] <= Sout[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[1] <= Sout[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[2] <= Sout[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[3] <= Sout[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[4] <= Sout[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[5] <= Sout[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[6] <= Sout[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[7] <= Sout[7]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[8] <= Sout[8]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[9] <= Sout[9]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[10] <= Sout[10]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[11] <= Sout[11]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[12] <= Sout[12]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[13] <= Sout[13]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[14] <= Sout[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[15] <= Sout[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[16] <= Sout[16]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sout[17] <= Sout[17]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+short <= _short.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|top_commutation|FSM:PhaseA
+|commutation_dev|top_commutation:uut|FSM:PhaseA
 clk => Sout[0]~reg0.CLK
 clk => Sout[1]~reg0.CLK
 clk => Sout[2]~reg0.CLK
@@ -39,22 +78,22 @@ clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
 clk => NextState~1.DATAIN
 clk => State~17.DATAIN
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
 DesiredLoad[0] => Decoder1.IN0
 DesiredLoad[0] => Decoder2.IN1
 DesiredLoad[0] => Decoder3.IN1
@@ -76,7 +115,7 @@ Sout[4] <= Sout[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 Sout[5] <= Sout[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|top_commutation|FSM:PhaseB
+|commutation_dev|top_commutation:uut|FSM:PhaseB
 clk => Sout[0]~reg0.CLK
 clk => Sout[1]~reg0.CLK
 clk => Sout[2]~reg0.CLK
@@ -85,22 +124,22 @@ clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
 clk => NextState~1.DATAIN
 clk => State~17.DATAIN
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
 DesiredLoad[0] => Decoder1.IN0
 DesiredLoad[0] => Decoder2.IN1
 DesiredLoad[0] => Decoder3.IN1
@@ -122,7 +161,7 @@ Sout[4] <= Sout[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 Sout[5] <= Sout[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|top_commutation|FSM:PhaseC
+|commutation_dev|top_commutation:uut|FSM:PhaseC
 clk => Sout[0]~reg0.CLK
 clk => Sout[1]~reg0.CLK
 clk => Sout[2]~reg0.CLK
@@ -131,22 +170,22 @@ clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
 clk => NextState~1.DATAIN
 clk => State~17.DATAIN
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
-start => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
+rst => State.OUTPUTSELECT
 DesiredLoad[0] => Decoder1.IN0
 DesiredLoad[0] => Decoder2.IN1
 DesiredLoad[0] => Decoder3.IN1
