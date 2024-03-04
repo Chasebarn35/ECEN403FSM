@@ -66,3 +66,23 @@ initial begin
 	shorts = 3'b000;
 
 	watchdog = 0;
+
+
+	#(1 * `ClockPeriod);
+	#(1
+	rst = 0;
+
+	//TEST 1, INITIAL START FOR NO OUTPUT
+	passTest(Sout,18'b0, "Initial start", passed);
+	DesiredLoad = {`LAA,`LBB,`LCC};
+
+	#(4*`ClockPeriod)
+
+	passTest(Sout 18'b0, "Starting before Start Pin Enable", passed);
+
+	start = 1;
+	#(2*`ClockPeriod)
+
+	passTest(Sout,{`LAA,`LBB,`LCC}, "Starting with 3 Phases", passed);
+	DesiredLoad = {`LBB,`LCC,`LAA};
+	#(8

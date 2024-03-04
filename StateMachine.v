@@ -58,7 +58,7 @@ This gives 33 minimum total I/O Pins
        reg [3:0] State, NextState;
        always @(posedge clk) 
        begin
-	       if(rst)/
+	       if(rst)
 		       State = `BAD;
 	       else
 		       State = NextState;
@@ -137,7 +137,7 @@ This gives 33 minimum total I/O Pins
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S04; end //TODO
 				       `LBB: begin NextState = `S04; end
-				       `LCC: begin NextState = `SCC; end
+				       `LCC: begin NextState = `S08; end
 				       default: NextState = State;
 			       endcase
 		       end
