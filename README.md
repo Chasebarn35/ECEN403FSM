@@ -3,4 +3,11 @@ to run, simply run the command ```make```
 
 to test the code, run ```make test```
 
-I utilize GTKWave to read the vcd output
+I utilize GTKWave to read the vcd outputs
+
+### Verilog File Descriptions
+* StateMachine.v        state machine module
+* FSMTest.v             state machine test bench
+* top_commutation.v     module for fpga chip
+* commutationtb.v       output test bench
+* commutation_dev.v     module for dev board 
