@@ -25,19 +25,16 @@ module top_commutation(
 	input wire clk, //internal clock
 	input wire rst, //reset pin from MCU
 	input wire start, //start pin from MCU, START IS ON THE SW
-	input wire [2:0]shorts, //Shorts from each phase 
+	input wire short, //Short pin from MCU
 	input wire [2:0] CurrentSign, //Current of each phase ABC
 	input wire [5:0] DesiredLoad, //Desired load for each phase from MCU AABBCC
-	output reg [17:0] Sout, //OUTPUT 
-	output wire short
+	output reg [17:0] Sout //OUTPUT 
 );
 
 
 reg _short;
-assign short = _short;
 reg _rst;
 wire [17:0] _Sout; //output to be ANDed with Short output
-
 
 FSM PhaseA(
 	clk,
@@ -67,7 +64,7 @@ initial begin
 end
 
 always @(posedge clk) begin
-	if(shorts) begin _short = 1; end
+	if(short) begin _short = 1; end
 end
 
 always @(posedge clk) begin
@@ -75,7 +72,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	Sout <= short ? 18'b0 : _Sout;
+	Sout <= _short ? 18'b0 : _Sout;
 end
 
 

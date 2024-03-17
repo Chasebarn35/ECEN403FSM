@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 `define BAD 4'b0000 
 `define S01 4'b0001 
 `define S02 4'b0010 
@@ -21,11 +23,17 @@
 `define LCCP 3'b111
 `define LCCN 3'b011
 `ifndef LAA
-`define LAA 2'b01
-`define LBB 2'b10
-`define LCC 2'b11
-`define NUL 2'b00
+	`define LAA 2'b01
+	`define LBB 2'b10
+	`define LCC 2'b11
+	`define NUL 2'b00
 `endif
+`define TDOFF 9
+`define TDON  1
+
+//+1 Clock Cycle
+//10 clock cycles at 100MHz to turn off, 100ns
+//2 clock cycle at 100MHz to turn on, 20ns
 
 
 /*
@@ -57,18 +65,34 @@ This gives 33 minimum total I/O Pins
 	       output reg [5:0] Sout
        );
 
+
        reg [3:0] State, NextState;
-       always @(posedge clk) 
+       reg [3:0] Counter, CntTot;
+
+
+       always @(posedge clk or posedge rst) 
        begin
-	       if(rst)
+	       if(rst) begin
 		       State = `BAD;
-	       else
+	       end
+	       else if (Counter >= CntTot) begin
 		       State = NextState;
+		       Counter <= 0;
+	       end
        end
+       always @(posedge clk)
+       begin
+	       if(~rst) begin
+		       Counter = Counter + 1;
+	       end
+       end
+
 
        initial begin
 	       Sout <= 6'b000000;
-	       State = `BAD;
+	       State <= `BAD;
+	       Counter <= 0;
+	       CntTot <= 0;
        end
 
        always @(posedge clk)
@@ -77,6 +101,7 @@ This gives 33 minimum total I/O Pins
 		       `S01:
 		       begin
 			       Sout <= 6'b100000;
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `S02; end
@@ -87,6 +112,7 @@ This gives 33 minimum total I/O Pins
 		       `S02:	
 		       begin
 			       Sout <= 6'b101000;
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S01; end
 				       `LBB: begin NextState = `S05; end
@@ -97,6 +123,7 @@ This gives 33 minimum total I/O Pins
 		       `S03:	
 		       begin
 			       Sout <= 6'b010100;
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S11; end
 				       `LBB: begin NextState = `S04; end
@@ -107,6 +134,7 @@ This gives 33 minimum total I/O Pins
 		       `S04:	
 		       begin
 			       Sout <= 6'b000100;
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S03; end
 				       `LBB: begin NextState = `SBB; end
@@ -117,6 +145,7 @@ This gives 33 minimum total I/O Pins
 		       `S05:	
 		       begin
 			       Sout <= 6'b001000;
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S02; end
 				       `LBB: begin NextState = `SBB; end
@@ -127,6 +156,7 @@ This gives 33 minimum total I/O Pins
 		       `S06:	
 		       begin
 			       Sout <= 6'b001010;
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S05; end //TODO
 				       `LBB: begin NextState = `S05; end
@@ -136,7 +166,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `S07:	
 		       begin
-			       Sout <= 6'b000101;
+			       Sout <= 6'b000101; //Turning ON
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S04; end //TODO
 				       `LBB: begin NextState = `S04; end
@@ -144,9 +175,10 @@ This gives 33 minimum total I/O Pins
 				       default: NextState = State;
 			       endcase
 		       end
-		       `S08:	
+		       `S08:
 		       begin
-			       Sout <= 6'b000001;
+			       Sout <= 6'b000001; //Turning OFF
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S12; end
 				       `LBB: begin NextState = `S07; end
@@ -156,7 +188,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `S09:	
 		       begin
-			       Sout <= 6'b100010;
+			       Sout <= 6'b100010; //Turning ON
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S01; end
 				       `LBB: begin NextState = `S01; end //TODO
@@ -166,7 +199,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `S10:	
 		       begin
-			       Sout <= 6'b000010;
+			       Sout <= 6'b000010; //Turning OFF
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S09; end
 				       `LBB: begin NextState = `S06; end
@@ -176,7 +210,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `S11:	
 		       begin
-			       Sout <= 6'b010000;
+			       Sout <= 6'b010000; //turning OFF
+			       CntTot <= `TDOFF;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `S03; end
@@ -186,7 +221,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `S12:	
 		       begin
-			       Sout <= 6'b010001;
+			       Sout <= 6'b010001; //turning ON
+			       CntTot <= `TDON;
 			       case(DesiredLoad)
 				       `LAA: begin NextState = `S11; end
 				       `LBB: begin NextState = `S11; end //TODO
@@ -196,7 +232,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `SAA:	
 		       begin
-			       Sout <= 6'b110000;
+			       Sout <= 6'b110000; //turning ON
+			       CntTot <= `TDON;
 			       case({CurrentSign,DesiredLoad})
 				       `LAAP: begin NextState = `SAA; end
 				       `LAAN: begin NextState = `SAA; end
@@ -206,11 +243,11 @@ This gives 33 minimum total I/O Pins
 				       `LCCN: begin NextState = `S11; end
 				       default: NextState = State;
 			       endcase
-
 		       end
 		       `SBB:	
 		       begin
-			       Sout <= 6'b001100;
+			       Sout <= 6'b001100; //turning ON
+			       CntTot <= `TDON;
 			       case({CurrentSign,DesiredLoad})
 				       `LAAP: begin NextState = `S05; end
 				       `LAAN: begin NextState = `S04; end
@@ -223,7 +260,8 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `SCC:	
 		       begin
-			       Sout <= 6'b000011;
+			       Sout <= 6'b000011; //turning ON
+			       CntTot <= `TDON;
 			       case({CurrentSign,DesiredLoad})
 				       `LAAP: begin NextState = `S10; end
 				       `LAAN: begin NextState = `S08; end
@@ -236,8 +274,9 @@ This gives 33 minimum total I/O Pins
 		       end
 		       `BAD:	
 		       begin
-			       Sout <= 6'b000000;
-			       case(DesiredLoad)
+			       Sout <= 6'b000000; //turning OFF
+			       CntTot <= 0;
+			       case(DesiredLoad) //TODO FIGURE THIS OUT
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `SBB; end
 				       `LCC: begin NextState = `SCC; end

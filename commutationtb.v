@@ -2,8 +2,7 @@
 
 
 `define TESTCOUNT 32 
-`define QuartClock 25
-`define HalfClock 50 
+`define HalfClock 5
 `define ClockPeriod `HalfClock * 2 
 `define SAA 6'b110000
 `define SBB 6'b001100
@@ -12,6 +11,8 @@
 `define LBB 2'b10 
 `define LCC 2'b11 
 `define NUL 2'b00 
+`define TDOFF 10
+`define TDON 2
 
 
 module commutationTB; 
@@ -42,26 +43,24 @@ reg PLL;
 reg CLK;
 reg RST;
 reg START;
-reg [2:0] SHORTS;
 reg [2:0] CURRSIGNS;
 reg [5:0] D_LOAD;
+reg SHORT;
 
 // UUT
 reg [7:0] passed;
 
 // Outputs
 wire [17:0] SOUT;
-wire SHORT;
 
 top_commutation uut (
-	.clk(PLL),
+	.clk(CLK),
 	.rst(RST),
 	.start(START),
-	.shorts(SHORTS),
+	.short(SHORT),
 	.CurrentSign(CURRSIGNS),
 	.DesiredLoad(D_LOAD),
-	.Sout(SOUT),
-	.short(SHORT)
+	.Sout(SOUT)
 );
 
 initial begin
@@ -69,11 +68,10 @@ initial begin
 	passed = 0;
 	D_LOAD = {`NUL,`NUL,`NUL};
 	START = 0;
-	SHORTS = 3'b000;
 
 
 
-	#(1 * `ClockPeriod);
+	#(2 * `ClockPeriod);
 	RST = 0;
 
 	//TEST 1, INITIAL START FOR NO OUTPUT
@@ -84,37 +82,38 @@ initial begin
 	passTest(SOUT,18'b0, "Check Before Start", passed);
 
 	START = 1;
-	#(2*`ClockPeriod)
+	#(3*`ClockPeriod)
 	passTest(SOUT,{`SAA,`SBB,`SCC}, "Reset to SAABBCC", passed);
 
 	D_LOAD = {`LBB,`LCC,`LAA};
-	#(5*`ClockPeriod)
+	#(`TDOFF*2*`TDON*`ClockPeriod)
 	passTest(SOUT,{`SBB,`SCC,`SAA}, "SAABBCC to SBBCCAA", passed);
 
 	D_LOAD = {`LCC,`LAA,`LBB};
-	#(5*`ClockPeriod)
+	#(`TDOFF*2*`TDON*`ClockPeriod)
 	passTest(SOUT,{`SCC,`SAA,`SBB}, "SBBCCAA to SCCAABB", passed);
 
 	CURRSIGNS = 3'b110;
 
 	D_LOAD = {`LBB,`LCC,`LAA};
-	#(5*`ClockPeriod)
+	#(`TDOFF*2*`TDON*`ClockPeriod)
 	passTest(SOUT,{`SBB,`SCC,`SAA}, "SCCAABB to SBBCCAA Curr", passed);
 
 	RST = 1;
-	#(2 * `ClockPeriod);
+	#(3 * `ClockPeriod);
 	passTest(SOUT,18'b0, "Reset", passed);
 
-	RST = 0;
 	D_LOAD = {`LAA,`LAA,`LBB};
-	#(5*`ClockPeriod)
+	#(`TDON*`ClockPeriod)
+	RST = 0;
+	#(`TDON*2*`ClockPeriod)
 	passTest(SOUT,{`SAA,`SAA,`SBB}, "Reset to SAAAABB", passed);
 
-	SHORTS = 3'b110;
+	SHORT = 1;
 	#(2*`ClockPeriod)
 	passTest(SOUT,18'b0, "Shorted", passed);
 
-	SHORTS = 3'b0;
+	SHORT = 0;
 	#(2*`ClockPeriod)
 	passTest(SOUT,18'b0, "Shorted After Pulse Off", passed);
 
@@ -126,13 +125,7 @@ end
 
 initial begin
 	CLK = 1;
-	PLL = 1;
 	CURRSIGNS = 3'b0;
-end
-
-always begin
-	#`QuartClock PLL = ~PLL;
-	#`QuartClock PLL = ~PLL;
 end
 
 always begin
