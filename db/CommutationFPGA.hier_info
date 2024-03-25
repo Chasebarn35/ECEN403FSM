@@ -17,17 +17,12 @@ SW[2] => Mux2.IN2
 SW[2] => Mux3.IN2
 SW[2] => Mux4.IN2
 SW[3] => SHORT.OUTPUTSELECT
-SW[3] => LED[0]~reg0.ENA
-SW[3] => LED[1]~reg0.ENA
-SW[3] => LED[2]~reg0.ENA
-SW[3] => LED[3]~reg0.ENA
-SW[3] => LED[4]~reg0.ENA
 SW[4] => START.IN1
-LED[0] << LED[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-LED[1] << LED[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-LED[2] << LED[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-LED[3] << LED[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-LED[4] << LED[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[0] <= LED[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[1] <= LED[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[2] <= LED[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[3] <= LED[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+LED[4] <= LED[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |commutation_dev|top_commutation:uut
@@ -75,9 +70,17 @@ clk => Sout[2]~reg0.CLK
 clk => Sout[3]~reg0.CLK
 clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
+clk => Counter[0].CLK
+clk => Counter[1].CLK
+clk => Counter[2].CLK
+clk => Counter[3].CLK
 clk => NextState~1.DATAIN
 clk => State~33.DATAIN
 rst => State~35.DATAIN
+rst => Counter[3].ENA
+rst => Counter[2].ENA
+rst => Counter[1].ENA
+rst => Counter[0].ENA
 DesiredLoad[0] => Decoder0.IN1
 DesiredLoad[0] => Decoder2.IN0
 DesiredLoad[0] => Decoder3.IN1
@@ -110,9 +113,17 @@ clk => Sout[2]~reg0.CLK
 clk => Sout[3]~reg0.CLK
 clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
+clk => Counter[0].CLK
+clk => Counter[1].CLK
+clk => Counter[2].CLK
+clk => Counter[3].CLK
 clk => NextState~1.DATAIN
 clk => State~33.DATAIN
 rst => State~35.DATAIN
+rst => Counter[3].ENA
+rst => Counter[2].ENA
+rst => Counter[1].ENA
+rst => Counter[0].ENA
 DesiredLoad[0] => Decoder0.IN1
 DesiredLoad[0] => Decoder2.IN0
 DesiredLoad[0] => Decoder3.IN1
@@ -145,9 +156,17 @@ clk => Sout[2]~reg0.CLK
 clk => Sout[3]~reg0.CLK
 clk => Sout[4]~reg0.CLK
 clk => Sout[5]~reg0.CLK
+clk => Counter[0].CLK
+clk => Counter[1].CLK
+clk => Counter[2].CLK
+clk => Counter[3].CLK
 clk => NextState~1.DATAIN
 clk => State~33.DATAIN
 rst => State~35.DATAIN
+rst => Counter[3].ENA
+rst => Counter[2].ENA
+rst => Counter[1].ENA
+rst => Counter[0].ENA
 DesiredLoad[0] => Decoder0.IN1
 DesiredLoad[0] => Decoder2.IN0
 DesiredLoad[0] => Decoder3.IN1

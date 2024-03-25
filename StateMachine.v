@@ -72,15 +72,14 @@ This gives 33 minimum total I/O Pins
 
        always @(posedge clk or posedge rst) 
        begin
-	       if(rst) begin
-		       State = `BAD;
-	       end
-	       else 
+	       if(rst) begin	State = `BAD;	end
+	       else begin
 		       if (Counter >= CntTot) begin
-		       State = NextState;
-		       Counter <= 0;
+			       State = NextState;
+			       Counter = 0;
+		       end
+		       else begin	Counter = Counter + 1;	end
 	       end
-		       Counter <= Counter + 1;
        end
 
        initial begin

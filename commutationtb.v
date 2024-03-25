@@ -64,6 +64,7 @@ top_commutation uut (
 );
 
 initial begin
+	SHORT = 0;
 	RST = 1;
 	passed = 0;
 	D_LOAD = {`NUL,`NUL,`NUL};

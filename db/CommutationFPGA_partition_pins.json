@@ -24,10 +24,6 @@
 					"strict" : false
 				},
 				{
-					"name" : "clk",
-					"strict" : false
-				},
-				{
 					"name" : "SW[1]",
 					"strict" : false
 				},
@@ -37,6 +33,10 @@
 				},
 				{
 					"name" : "SW[2]",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
 					"strict" : false
 				},
 				{
