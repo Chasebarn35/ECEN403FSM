@@ -46,10 +46,6 @@
 				{
 					"name" : "SW[4]",
 					"strict" : false
-				},
-				{
-					"name" : "rst",
-					"strict" : false
 				}
 			]
 		}
