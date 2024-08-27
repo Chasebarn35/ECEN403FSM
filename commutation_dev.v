@@ -5,126 +5,87 @@
 `define NUL 2'b00  
 `endif
 
-//Data is done BigEnding, [5:4] for Desired Load is A, so on so forth
+//Data is done BigEndian, [5:4] for Desired Load is A, so on so forth
 //ABC
 //AABBCC
 //AAAAAABBBBBBCCCCCC
 
 module commutation_dev(
 	input wire clk,
+	input wire [5:0] D_LOAD,
 	//input wire rst,
 	input wire [4:0] SW,
-	output reg [4:0] LED
+	input wire SHORT,
+	output reg [4:0] LED,
+	output wire [17:0] SOUT,
+	output reg [2:0] VOLTOUT
 );
 
 //Inputs
-//clk
-reg rst;
+wire RST;
 wire START;
-reg SHORT;
-reg [2:0] CURRSIGNS;
-reg [5:0] D_LOAD;
+wire [2:0] CURRSIGNS;
+assign START = SW[3];
+//assign SHORT = SW[3];//4th SWITCH
+assign RST   = SW[2];//3rd Switch
 
-assign START = SW[4];//5th SWITCH
+//Input Simulation output to MCU
+reg[18:0] VoltTimerA;
+reg[18:0] VoltTimerB;
+reg[18:0] VoltTimerC;
+
+//Intermediate Outputs
+//wire [5:0] SoutA;
+//wire [5:0] SoutB;
+//wire [5:0] SoutC;
+wire SHORTED;
 
 
-//Input Simulation
-reg[18:0] currentTimerA;
-reg[18:0] currentTimerB;
-reg[18:0] currentTimerC;
-
-//Outputs
-wire [5:0] SoutA;
-wire [5:0] SoutB;
-wire [5:0] SoutC;
-
+	
+	
 top_commutation uut (
 	.clk(clk),
-	.rst(rst),
+	.rst(RST),
 	.start(START),
-	.short(SHORT),
+	.shorts({2'b0,SHORT}),
 	.CurrentSign(CURRSIGNS),
 	.DesiredLoad(D_LOAD),
-	.Sout({SoutA,SoutB,SoutC})
+	.Sout(SOUT),
+	.shorted(SHORTED)
 );
 
 initial begin
-	rst = 1;
 	LED <= 5'b0;
-	D_LOAD = {`NUL,`NUL,`NUL};
-	SHORT = 0;
-	CURRSIGNS <= 3'b110;
-	currentTimerA = 0;//Initial Phase is 0
-	currentTimerB = 277778;//416667 * 2/3
-	currentTimerC = 138889;//416667 * 1/3
+	VOLTOUT <= 3'b110;
+	VoltTimerA = 0;//Initial Phase is 0
+	VoltTimerB = 277778;//416667 * 2/3
+	VoltTimerC = 138889;//416667 * 1/3
 end
 //Assuming that this is running at 50MHz, I want to change the current sign every 120Hz.
 //This 50M/120=416667, repeat for each
 //This is temporary, just to simulate current signs
 always @(posedge clk) begin
-	if(currentTimerA >= 416667) begin
-		CURRSIGNS[2] <= ~CURRSIGNS[2];
-		currentTimerA = 0;
+	if(VoltTimerA >= 416667) begin
+		VOLTOUT[2] <= ~VOLTOUT[2];
+		VoltTimerA = 0;
 	end
-	if(currentTimerB >= 416667) begin
-		CURRSIGNS[1] <= ~CURRSIGNS[1];
-		currentTimerB = 0;
+	if(VoltTimerB >= 416667) begin
+		VOLTOUT[1] <= ~VOLTOUT[1];
+		VoltTimerB = 0;
 	end
-	if(currentTimerC >= 416667) begin
-		CURRSIGNS[0] <= ~CURRSIGNS[0];
-		currentTimerC = 0;
+	if(VoltTimerC >= 416667) begin
+		VOLTOUT[0] <= ~VOLTOUT[0];
+		VoltTimerC = 0;
 	end
-	currentTimerA = currentTimerA + 19'b1;
-	currentTimerB = currentTimerB + 19'b1;
-	currentTimerC = currentTimerC + 19'b1;
+	VoltTimerA = VoltTimerA + 19'b1;
+	VoltTimerB = VoltTimerB + 19'b1;
+	VoltTimerC = VoltTimerC + 19'b1;
 end
 
 
 always @(posedge clk)
 begin
-	if(SW[3]) begin
-		SHORT = 1; //TEMPORARY SHORT ACT, ARBITRARY SHORTAGE
-	end
-	if(SW[4]) begin
-		rst = 0;
-	end
-end
-
-
-
-
-always @(posedge clk)
-begin
-	case(SW[2:0])
-		3'b000: //Display BBCCc of A
-		begin 
-		LED <= {SoutA[3:0],CURRSIGNS[2]};
-	end
-	3'b001: //Display BBCCc of B
-	begin 
-	LED <= {SoutB[3:0],CURRSIGNS[1]};
-end
-3'b010: //Dispaly BBCCc of C
-begin 
-LED <= {SoutC[3:0],CURRSIGNS[0]};
-end
-3'b011: 
-begin //Display AADLc of A
-LED <= {SoutA[5:4],D_LOAD[5:4],CURRSIGNS[2]};
-		end
-		3'b100: 
-		begin //Display AADLc of B
-		LED <= {SoutB[5:4],D_LOAD[3:2],CURRSIGNS[1]};
-	end
-	3'b101: 
-	begin //Display AADLc of C
-	LED <= {SoutC[5:4],D_LOAD[1:0],CURRSIGNS[0]};
-end
-default: 
-begin
-	LED <= 5'b1;
-end
-	endcase
+	LED <= {CURRSIGNS,SHORTED,1'b0};
 end
 
 

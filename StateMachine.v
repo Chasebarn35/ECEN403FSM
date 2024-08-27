@@ -31,9 +31,9 @@
 `define TDOFF 9
 `define TDON  1
 
-//+1 Clock Cycle
-//10 clock cycles at 100MHz to turn off, 100ns
-//2 clock cycle at 100MHz to turn on, 20ns
+//N+1 Clock Cycle
+//15 clock cycles at 50MHz to turn off, 320ns
+//2 clock cycle at 50MHz to turn on, 20ns
 
 
 /*
@@ -274,7 +274,6 @@ This gives 33 minimum total I/O Pins
 				       `LAA: begin NextState = `SAA; end
 				       `LBB: begin NextState = `SBB; end
 				       `LCC: begin NextState = `SCC; end
-				       `NUL: begin NextState = `BAD; end
 				       default: NextState = State;
 			       endcase
 		       end
